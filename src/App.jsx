@@ -1,21 +1,11 @@
 import { useState, useEffect } from "react";
-import { BrowserRouter as Router, Routes, Route, useLocation, useNavigate } from "react-router-dom";
 
-function Tabs() {
-  const location = useLocation();
-  const navigate = useNavigate();
+function App() {
   const [activeTab, setActiveTab] = useState("machines");
   const [memberId, setMemberId] = useState(null);
   const [machines, setMachines] = useState([]);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const path = location.pathname.replace("/", "");
-    if (["machines", "orders", "settings"].includes(path)) {
-      setActiveTab(path);
-    }
-  }, [location.pathname]);
 
   useEffect(() => {
     async function checkUserLogin() {
@@ -68,22 +58,17 @@ function Tabs() {
     checkUserLogin();
   }, []);
 
-  const handleTabClick = (tab) => {
-    setActiveTab(tab);
-    navigate(`/${tab}`);
-  };
-
   return (
     <div>
       <h1>Особистий кабінет</h1>
       <div className="tabs">
-        <button onClick={() => handleTabClick("machines")} className={activeTab === "machines" ? "active" : ""}>
+        <button onClick={() => setActiveTab("machines")} className={activeTab === "machines" ? "active" : ""}>
           Мої машини
         </button>
-        <button onClick={() => handleTabClick("orders")} className={activeTab === "orders" ? "active" : ""}>
+        <button onClick={() => setActiveTab("orders")} className={activeTab === "orders" ? "active" : ""}>
           Історія замовлень
         </button>
-        <button onClick={() => handleTabClick("settings")} className={activeTab === "settings" ? "active" : ""}>
+        <button onClick={() => setActiveTab("settings")} className={activeTab === "settings" ? "active" : ""}>
           Налаштування профілю
         </button>
       </div>
@@ -136,19 +121,6 @@ function Tabs() {
         .tab-content { border: 1px solid #ddd; padding: 20px; }
       `}</style>
     </div>
-  );
-}
-
-function App() {
-  return (
-    <Router>
-      <Routes>
-        <Route path="/" element={<Tabs />} />
-        <Route path="/machines" element={<Tabs />} />
-        <Route path="/orders" element={<Tabs />} />
-        <Route path="/settings" element={<Tabs />} />
-      </Routes>
-    </Router>
   );
 }
 
